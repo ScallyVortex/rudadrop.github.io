@@ -1,0 +1,839 @@
+<!DOCTYPE html>
+<html lang="ru" class="light scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WhiteVisual — Чистый визуал без компромиссов</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            50: '#fafaf9',
+                            100: '#f5f5f4',
+                            400: '#78716c',
+                            500: '#1c1917',
+                            600: '#0c0a09',
+                            glow: '#e7e5e4',
+                            accent: '#3b82f6'
+                        },
+                        light: {
+                            bg: '#f8fafc',
+                            card: '#ffffff',
+                            border: '#e2e8f0',
+                            hover: '#f1f5f9'
+                        },
+                        dark: {
+                            bg: '#0a0a0c',
+                            card: '#121216',
+                            border: '#23232b',
+                            hover: '#1a1a22'
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'system-ui', '-apple-system', 'sans-serif']
+                    },
+                    boxShadow: {
+                        'glass-light': '0 10px 40px -10px rgba(0, 0, 0, 0.05), 0 0 1px 1px rgba(0, 0, 0, 0.02)',
+                        'glass-dark': '0 8px 32px 0 rgba(0, 0, 0, 0.37)',
+                        'glow-accent': '0 0 30px -5px rgba(59, 130, 246, 0.3)',
+                        'neumorph': '10px 10px 20px #e2e8f0, -10px -10px 20px #ffffff'
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            overflow-x: hidden;
+            transition: background-color 0.4s ease, color 0.4s ease;
+        }
+
+        /* Light & Dark Glassmorphism */
+        .light .glass-panel {
+            background: rgba(255, 255, 255, 0.82);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(226, 232, 240, 0.8);
+            box-shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.04);
+        }
+
+        .dark .glass-panel {
+            background: rgba(18, 18, 22, 0.75);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+        }
+
+        .light .glass-nav {
+            background: rgba(255, 255, 255, 0.88);
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
+            border: 1px solid rgba(226, 232, 240, 0.9);
+        }
+
+        .dark .glass-nav {
+            background: rgba(14, 14, 18, 0.85);
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
+            border: 1px solid rgba(255, 255, 255, 0.07);
+        }
+
+        /* Ambient Glow Effects */
+        .light .ambient-glow {
+            position: absolute;
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, rgba(59, 130, 246, 0.08) 0%, rgba(255, 255, 255, 0) 70%);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .dark .ambient-glow {
+            position: absolute;
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, rgba(249, 115, 22, 0.15) 0%, rgba(0, 0, 0, 0) 70%);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        /* Background Grid Pattern */
+        .light .bg-grid-pattern {
+            background-size: 40px 40px;
+            background-image: linear-gradient(to right, rgba(0, 0, 0, 0.03) 1px, transparent 1px),
+                              linear-gradient(to bottom, rgba(0, 0, 0, 0.03) 1px, transparent 1px);
+        }
+
+        .dark .bg-grid-pattern {
+            background-size: 40px 40px;
+            background-image: linear-gradient(to right, rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+                              linear-gradient(to bottom, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+        }
+
+        /* Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        .light ::-webkit-scrollbar-track { background: #f8fafc; }
+        .dark ::-webkit-scrollbar-track { background: #0a0a0c; }
+        .light ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+        .dark ::-webkit-scrollbar-thumb { background: #23232b; border-radius: 4px; }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-8px); }
+        }
+        .animate-float { animation: float 4s ease-in-out infinite; }
+        .animate-float-delayed { animation: float 5s ease-in-out 1.5s infinite; }
+    </style>
+</head>
+<body class="bg-light-bg dark:bg-dark-bg text-slate-800 dark:text-gray-200 relative min-h-screen selection:bg-blue-500 selection:text-white transition-colors duration-300">
+
+    <!-- Ambient Gradients -->
+    <div class="ambient-glow top-0 right-1/4 translate-x-1/2 -translate-y-1/3"></div>
+    <div class="ambient-glow bottom-1/4 right-0 translate-x-1/3"></div>
+
+    <!-- Background Grid -->
+    <div class="fixed inset-0 bg-grid-pattern pointer-events-none opacity-80 z-0"></div>
+
+    <!-- Top Navigation Bar -->
+    <header class="fixed top-4 left-1/2 -translate-x-1/2 w-[92%] max-w-7xl z-50 transition-all duration-300">
+        <nav class="glass-nav rounded-2xl px-5 py-3 flex items-center justify-between shadow-lg">
+            <!-- Brand Logo -->
+            <a href="#" class="flex items-center gap-3 group">
+                <div id="brand-logo" class="w-9 h-9 rounded-xl bg-slate-900 dark:bg-gradient-to-br dark:from-orange-500 dark:to-orange-700 flex items-center justify-center font-black text-white text-lg tracking-wider shadow-md group-hover:scale-105 transition-all">
+                    WV
+                </div>
+                <span id="brand-title" class="font-extrabold text-xl tracking-tight text-slate-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-orange-400 transition-colors">
+                    WhiteVisual
+                </span>
+            </a>
+
+            <!-- Nav Links -->
+            <div class="hidden lg:flex items-center gap-8 font-medium text-sm text-slate-600 dark:text-gray-300">
+                <a href="#features" class="hover:text-slate-900 dark:hover:text-orange-400 transition-colors">Преимущества</a>
+                <a href="#demo" class="hover:text-slate-900 dark:hover:text-orange-400 transition-colors">Демонстрация</a>
+                <a href="#pricing" class="hover:text-slate-900 dark:hover:text-orange-400 transition-colors">Тарифы</a>
+                <a href="#reviews" class="hover:text-slate-900 dark:hover:text-orange-400 transition-colors">Отзывы</a>
+                <a href="#faq" class="hover:text-slate-900 dark:hover:text-orange-400 transition-colors">FAQ</a>
+            </div>
+
+            <!-- Social Icons, Mode Switcher & Auth Button -->
+            <div class="flex items-center gap-3 sm:gap-4">
+                
+                <!-- Theme Switcher Switch (WhiteVisual <-> ReallyVisuals) -->
+                <button onclick="toggleTheme()" class="flex items-center gap-2 px-3 py-1.5 rounded-xl border border-slate-200 dark:border-gray-800 bg-slate-100 dark:bg-dark-hover hover:bg-slate-200 dark:hover:bg-gray-800 transition-all text-xs font-semibold" title="Переключить тему">
+                    <span id="theme-icon-light" class="text-amber-500 flex items-center gap-1.5">
+                        <i data-lucide="sun" class="w-4 h-4"></i>
+                        <span class="hidden md:inline text-slate-700">White</span>
+                    </span>
+                    <span id="theme-icon-dark" class="text-orange-400 hidden items-center gap-1.5">
+                        <i data-lucide="moon" class="w-4 h-4"></i>
+                        <span class="hidden md:inline text-gray-300">Dark</span>
+                    </span>
+                </button>
+
+                <div class="hidden sm:flex items-center gap-2 pr-2 border-r border-slate-200 dark:border-gray-800 text-slate-500 dark:text-gray-400">
+                    <a href="https://discord.com" target="_blank" class="p-2 hover:text-slate-900 dark:hover:text-white rounded-lg transition-all" title="Discord">
+                        <i data-lucide="disc" class="w-4 h-4"></i>
+                    </a>
+                    <a href="https://t.me" target="_blank" class="p-2 hover:text-slate-900 dark:hover:text-white rounded-lg transition-all" title="Telegram">
+                        <i data-lucide="send" class="w-4 h-4"></i>
+                    </a>
+                </div>
+
+                <button onclick="toggleModal('auth-modal')" class="bg-slate-900 hover:bg-slate-800 dark:bg-dark-hover dark:hover:bg-orange-500 text-white font-semibold text-xs sm:text-sm px-4 sm:px-5 py-2.5 rounded-xl transition-all duration-300 shadow-sm active:scale-95 flex items-center gap-2">
+                    <i data-lucide="user" class="w-4 h-4"></i>
+                    <span>Авторизация</span>
+                </button>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="relative z-10 pt-36 pb-20 md:pt-44 md:pb-28 px-4 max-w-7xl mx-auto min-h-screen flex flex-col justify-center">
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+            
+            <!-- Hero Left Content -->
+            <div class="lg:col-span-5 space-y-6 text-center lg:text-left">
+                <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full glass-panel border border-slate-300/80 dark:border-orange-500/30 text-slate-700 dark:text-orange-400 text-xs font-semibold tracking-wide uppercase">
+                    <span class="w-2 h-2 rounded-full bg-blue-500 dark:bg-orange-500 animate-ping"></span>
+                    WhiteVisual v3.4 — Чистота и Мощь
+                </div>
+
+                <h1 class="text-4xl sm:text-5xl lg:text-6xl font-black text-slate-900 dark:text-white leading-tight tracking-tight">
+                    Чистый визуал — <br class="hidden sm:inline"/>
+                    <span id="hero-gradient-text" class="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 via-indigo-600 to-slate-900 dark:from-orange-400 dark:via-orange-500 dark:to-amber-500">
+                        без лишнего шума
+                    </span>
+                </h1>
+
+                <p class="text-slate-600 dark:text-gray-400 text-base sm:text-lg leading-relaxed max-w-xl mx-auto lg:mx-0">
+                    WhiteVisual — инновационный Minecraft клиент в минималистичном белом стиле. Максимальная эстетика, непревзойденный прирост FPS и незаметный обход античитов.
+                </p>
+
+                <div class="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4 pt-4">
+                    <a href="#pricing" id="btn-primary" class="w-full sm:w-auto bg-slate-900 hover:bg-slate-800 dark:bg-gradient-to-r dark:from-orange-500 dark:to-orange-600 text-white font-bold px-8 py-4 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 flex items-center justify-center gap-2 group">
+                        <span>Начать использовать</span>
+                        <i data-lucide="arrow-right" class="w-5 h-5 group-hover:translate-x-1 transition-transform"></i>
+                    </a>
+                    <a href="#demo" class="w-full sm:w-auto glass-panel hover:bg-slate-100 dark:hover:bg-white/10 text-slate-800 dark:text-gray-200 font-semibold px-8 py-4 rounded-xl transition-all duration-300 flex items-center justify-center gap-2 border border-slate-200 dark:border-gray-700">
+                        <i data-lucide="play" class="w-4 h-4 fill-current"></i>
+                        <span>Демонстрация</span>
+                    </a>
+                </div>
+
+                <!-- Stats summary -->
+                <div class="grid grid-cols-3 gap-4 pt-8 border-t border-slate-200 dark:border-gray-800/80 text-center lg:text-left">
+                    <div>
+                        <div class="text-2xl font-extrabold text-slate-900 dark:text-white">0.1ms</div>
+                        <div class="text-xs text-slate-500 dark:text-gray-400">Задержка рендера</div>
+                    </div>
+                    <div>
+                        <div class="text-2xl font-extrabold text-slate-900 dark:text-white">+75%</div>
+                        <div class="text-xs text-slate-500 dark:text-gray-400">Прирост FPS</div>
+                    </div>
+                    <div>
+                        <div class="text-2xl font-extrabold text-slate-900 dark:text-white">18K+</div>
+                        <div class="text-xs text-slate-500 dark:text-gray-400">Игроков</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Hero Right Content: Neumorphic Light / Dark GUI Mockup -->
+            <div class="lg:col-span-7 relative">
+                
+                <!-- Floating Widget: Spotify Player -->
+                <div class="hidden sm:flex absolute -top-8 left-4 z-20 glass-panel p-3 rounded-2xl items-center gap-3 border border-slate-200 dark:border-white/10 shadow-lg animate-float">
+                    <div class="w-10 h-10 bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 rounded-xl flex items-center justify-center font-bold">
+                        <i data-lucide="music" class="w-5 h-5"></i>
+                    </div>
+                    <div class="text-xs">
+                        <div class="font-bold text-slate-900 dark:text-white">White Chill Wave</div>
+                        <div class="text-slate-500 dark:text-gray-400">Lofi Beats • 1:45</div>
+                    </div>
+                    <div class="flex items-center gap-2 ml-4 text-slate-400 dark:text-gray-400">
+                        <i data-lucide="skip-back" class="w-3.5 h-3.5 cursor-pointer hover:text-slate-800"></i>
+                        <i data-lucide="pause" class="w-4 h-4 text-blue-600 dark:text-orange-400 cursor-pointer"></i>
+                        <i data-lucide="skip-forward" class="w-3.5 h-3.5 cursor-pointer hover:text-slate-800"></i>
+                    </div>
+                </div>
+
+                <!-- Floating Widget: Event Radar -->
+                <div class="hidden sm:flex absolute -bottom-6 left-12 z-20 glass-panel px-4 py-2.5 rounded-xl items-center gap-3 border border-slate-200 dark:border-orange-500/30 shadow-md animate-float-delayed">
+                    <div class="w-3 h-3 rounded-full bg-blue-500 dark:bg-orange-500 animate-pulse"></div>
+                    <div class="text-xs font-semibold text-slate-700 dark:text-gray-200">
+                        Аирдроп Спавн <span class="text-blue-600 dark:text-orange-400 font-bold ml-1">120m</span>
+                    </div>
+                </div>
+
+                <!-- Main Client Window Mockup -->
+                <div class="glass-panel rounded-3xl p-4 sm:p-6 shadow-2xl bg-white/90 dark:bg-dark-card/90 relative overflow-hidden border border-slate-200/90 dark:border-gray-800/80">
+                    
+                    <!-- Client Top Header Bar -->
+                    <div class="flex items-center justify-between pb-5 border-b border-slate-200 dark:border-gray-800">
+                        <div class="flex items-center gap-3">
+                            <div id="gui-header-logo" class="w-7 h-7 rounded-lg bg-slate-900 dark:bg-orange-500 flex items-center justify-center font-extrabold text-white text-xs">
+                                WV
+                            </div>
+                            <span id="gui-header-title" class="font-bold text-lg text-slate-900 dark:text-white">WhiteVisual</span>
+                            <span class="text-xs bg-slate-100 dark:bg-orange-500/10 text-slate-600 dark:text-orange-400 px-2 py-0.5 rounded border border-slate-200 dark:border-orange-500/20 font-mono">Clean UI</span>
+                        </div>
+                        <div class="flex items-center gap-2 text-xs text-emerald-600 dark:text-emerald-400 font-medium">
+                            <span class="inline-block w-2 h-2 rounded-full bg-emerald-500"></span>
+                            <span>Undetected</span>
+                        </div>
+                    </div>
+
+                    <!-- Client Body: Sidebar + Content -->
+                    <div class="grid grid-cols-12 gap-4 pt-5">
+                        
+                        <!-- Client Sidebar Navigation -->
+                        <div class="col-span-4 sm:col-span-3 space-y-1.5 border-r border-slate-200 dark:border-gray-800/60 pr-3">
+                            <button onclick="switchTab('hud')" id="tab-hud" class="client-tab w-full flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-xs sm:text-sm font-medium transition-all text-slate-500 dark:text-gray-400 hover:text-slate-900 hover:bg-slate-100 dark:hover:text-white dark:hover:bg-dark-hover">
+                                <i data-lucide="layout" class="w-4 h-4"></i>
+                                <span>HUD</span>
+                            </button>
+                            <button onclick="switchTab('visuals')" id="tab-visuals" class="client-tab w-full flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-xs sm:text-sm font-medium transition-all text-slate-500 dark:text-gray-400 hover:text-slate-900 hover:bg-slate-100 dark:hover:text-white dark:hover:bg-dark-hover">
+                                <i data-lucide="eye" class="w-4 h-4"></i>
+                                <span>Visuals</span>
+                            </button>
+                            <button onclick="switchTab('marks')" id="tab-marks" class="client-tab w-full flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-xs sm:text-sm font-medium transition-all text-slate-500 dark:text-gray-400 hover:text-slate-900 hover:bg-slate-100 dark:hover:text-white dark:hover:bg-dark-hover">
+                                <i data-lucide="flag" class="w-4 h-4"></i>
+                                <span>Marks</span>
+                            </button>
+                            <button onclick="switchTab('utilities')" id="tab-utilities" class="client-tab active-tab w-full flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-xs sm:text-sm font-medium transition-all bg-slate-900 dark:bg-orange-500 text-white shadow-sm">
+                                <i data-lucide="wrench" class="w-4 h-4"></i>
+                                <span>Utilities</span>
+                            </button>
+                        </div>
+
+                        <!-- Client Content Area -->
+                        <div class="col-span-8 sm:col-span-9 pl-1 space-y-4">
+                            
+                            <!-- Sub-tabs bar -->
+                            <div class="flex items-center gap-2 overflow-x-auto pb-2 border-b border-slate-200 dark:border-gray-800/40 text-xs">
+                                <button class="px-3 py-1 rounded-lg bg-slate-900 dark:bg-orange-500/20 text-white dark:text-orange-400 font-semibold text-[11px]">AutoFarm</button>
+                                <button class="px-3 py-1 rounded-lg text-slate-500 dark:text-gray-400 hover:text-slate-900 hover:bg-slate-100 dark:hover:text-white dark:hover:bg-dark-hover transition-colors text-[11px]">Scanner</button>
+                                <button class="px-3 py-1 rounded-lg text-slate-500 dark:text-gray-400 hover:text-slate-900 hover:bg-slate-100 dark:hover:text-white dark:hover:bg-dark-hover transition-colors text-[11px]">QuickRelink</button>
+                            </div>
+
+                            <!-- Interactive Toggle Options -->
+                            <div class="space-y-3 max-h-[260px] overflow-y-auto pr-1">
+                                
+                                <!-- Toggle Item 1 -->
+                                <div class="p-3.5 rounded-2xl bg-slate-50 dark:bg-dark-bg/80 border border-slate-200 dark:border-gray-800/80 hover:border-slate-300 transition-all flex items-center justify-between">
+                                    <div class="space-y-1 max-w-[75%]">
+                                        <div class="flex items-center gap-2">
+                                            <span class="font-bold text-sm text-slate-900 dark:text-white">AutoFarm Pro</span>
+                                            <span class="text-[10px] bg-slate-200 dark:bg-orange-500/20 text-slate-700 dark:text-orange-400 px-1.5 py-0.5 rounded font-mono">HOTKEY: NONE</span>
+                                        </div>
+                                        <p class="text-xs text-slate-500 dark:text-gray-400">Автоматически продаёт ресурсы NPC в тихом режиме с интеллектуальной задержкой.</p>
+                                    </div>
+                                    <label class="relative inline-flex items-center cursor-pointer">
+                                        <input type="checkbox" checked class="sr-only peer">
+                                        <div class="w-11 h-6 bg-slate-300 dark:bg-gray-700 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-slate-900 dark:peer-checked:bg-orange-500"></div>
+                                    </label>
+                                </div>
+
+                                <!-- Toggle Item 2 -->
+                                <div class="p-3.5 rounded-2xl bg-slate-50 dark:bg-dark-bg/80 border border-slate-200 dark:border-gray-800/80 hover:border-slate-300 transition-all flex items-center justify-between">
+                                    <div class="space-y-1 max-w-[75%]">
+                                        <div class="flex items-center gap-2">
+                                            <span class="font-bold text-sm text-slate-900 dark:text-white">Clean Radar (Радар)</span>
+                                            <span class="text-[10px] bg-slate-200 dark:bg-gray-800 text-slate-700 dark:text-gray-300 px-1.5 py-0.5 rounded font-mono">CTRL + R</span>
+                                        </div>
+                                        <p class="text-xs text-slate-500 dark:text-gray-400">Минималистичное оповещение о появлении врагов и администрации.</p>
+                                    </div>
+                                    <label class="relative inline-flex items-center cursor-pointer">
+                                        <input type="checkbox" checked class="sr-only peer">
+                                        <div class="w-11 h-6 bg-slate-300 dark:bg-gray-700 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-slate-900 dark:peer-checked:bg-orange-500"></div>
+                                    </label>
+                                </div>
+
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section id="features" class="py-24 relative z-10 px-4 max-w-7xl mx-auto">
+        <div class="text-center space-y-4 mb-16">
+            <h2 class="text-xs font-bold uppercase tracking-widest text-blue-600 dark:text-orange-400">Технологии будущего</h2>
+            <h3 class="text-3xl sm:text-4xl font-extrabold text-slate-900 dark:text-white">Преимущества WhiteVisual</h3>
+            <p class="text-slate-600 dark:text-gray-400 max-w-2xl mx-auto text-sm sm:text-base">
+                Легкий стек рендеринга без нагрузки на видеокарту и процессор
+            </p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            
+            <div class="glass-panel p-6 rounded-3xl space-y-4 border border-slate-200 dark:border-gray-800 hover:border-blue-400 dark:hover:border-orange-500/50 transition-all duration-300 group hover:-translate-y-1">
+                <div class="w-12 h-12 rounded-2xl bg-blue-50 dark:bg-orange-500/10 text-blue-600 dark:text-orange-400 flex items-center justify-center group-hover:bg-slate-900 group-hover:text-white dark:group-hover:bg-orange-500 transition-all shadow-sm">
+                    <i data-lucide="sparkles" class="w-6 h-6"></i>
+                </div>
+                <h4 class="text-xl font-bold text-slate-900 dark:text-white">Минимализм</h4>
+                <p class="text-slate-600 dark:text-gray-400 text-sm leading-relaxed">
+                    Эстетичный светлый интерфейс без нагромождения элементов, оптимизированный под любые экраны.
+                </p>
+            </div>
+
+            <div class="glass-panel p-6 rounded-3xl space-y-4 border border-slate-200 dark:border-gray-800 hover:border-blue-400 dark:hover:border-orange-500/50 transition-all duration-300 group hover:-translate-y-1">
+                <div class="w-12 h-12 rounded-2xl bg-blue-50 dark:bg-orange-500/10 text-blue-600 dark:text-orange-400 flex items-center justify-center group-hover:bg-slate-900 group-hover:text-white dark:group-hover:bg-orange-500 transition-all shadow-sm">
+                    <i data-lucide="cpu" class="w-6 h-6"></i>
+                </div>
+                <h4 class="text-xl font-bold text-slate-900 dark:text-white">Нулевая Задержка</h4>
+                <p class="text-slate-600 dark:text-gray-400 text-sm leading-relaxed">
+                    Оптимизированный C++ код обеспечивает моментальный отклики и стабильную частоту кадров.
+                </p>
+            </div>
+
+            <div class="glass-panel p-6 rounded-3xl space-y-4 border border-slate-200 dark:border-gray-800 hover:border-blue-400 dark:hover:border-orange-500/50 transition-all duration-300 group hover:-translate-y-1">
+                <div class="w-12 h-12 rounded-2xl bg-blue-50 dark:bg-orange-500/10 text-blue-600 dark:text-orange-400 flex items-center justify-center group-hover:bg-slate-900 group-hover:text-white dark:group-hover:bg-orange-500 transition-all shadow-sm">
+                    <i data-lucide="shield-check" class="w-6 h-6"></i>
+                </div>
+                <h4 class="text-xl font-bold text-slate-900 dark:text-white">Античит Защита</h4>
+                <p class="text-slate-600 dark:text-gray-400 text-sm leading-relaxed">
+                    Полный обход современных проверок GrimAC, Vulcan, Matrix и внутренних плагинов популярных серверов.
+                </p>
+            </div>
+
+            <div class="glass-panel p-6 rounded-3xl space-y-4 border border-slate-200 dark:border-gray-800 hover:border-blue-400 dark:hover:border-orange-500/50 transition-all duration-300 group hover:-translate-y-1">
+                <div class="w-12 h-12 rounded-2xl bg-blue-50 dark:bg-orange-500/10 text-blue-600 dark:text-orange-400 flex items-center justify-center group-hover:bg-slate-900 group-hover:text-white dark:group-hover:bg-orange-500 transition-all shadow-sm">
+                    <i data-lucide="cloud-rain" class="w-6 h-6"></i>
+                </div>
+                <h4 class="text-xl font-bold text-slate-900 dark:text-white">Cloud Configs</h4>
+                <p class="text-slate-600 dark:text-gray-400 text-sm leading-relaxed">
+                    Сохраняйте свои конфиги в облаке и загружайте готовые сеты топовых игроков за пару секунд.
+                </p>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- Live Demo Section -->
+    <section id="demo" class="py-20 relative z-10 px-4 max-w-7xl mx-auto">
+        <div class="glass-panel rounded-3xl p-8 border border-slate-200 dark:border-gray-800">
+            <div class="text-center space-y-3 mb-10">
+                <h3 class="text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-white">Интерактивный Превью Экрана</h3>
+                <p class="text-slate-600 dark:text-gray-400 text-sm">Изменяйте внешний вид элементов прямо в браузере</p>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+                
+                <!-- Controls -->
+                <div class="lg:col-span-5 space-y-6">
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-700 dark:text-gray-300 mb-2">Акцент стиля</label>
+                        <div class="flex items-center gap-3">
+                            <button onclick="setHudColor('#0f172a')" class="w-8 h-8 rounded-full bg-slate-900 hover:scale-110 transition-transform"></button>
+                            <button onclick="setHudColor('#2563eb')" class="w-8 h-8 rounded-full bg-blue-600 hover:scale-110 transition-transform"></button>
+                            <button onclick="setHudColor('#059669')" class="w-8 h-8 rounded-full bg-emerald-600 hover:scale-110 transition-transform"></button>
+                            <button onclick="setHudColor('#ea580c')" class="w-8 h-8 rounded-full bg-orange-600 hover:scale-110 transition-transform"></button>
+                        </div>
+                    </div>
+
+                    <div class="space-y-3">
+                        <label class="block text-xs font-semibold text-slate-700 dark:text-gray-300">Оверлеи</label>
+                        
+                        <label class="flex items-center justify-between p-3 rounded-xl bg-slate-100 dark:bg-dark-bg border border-slate-200 dark:border-gray-800 cursor-pointer">
+                            <span class="text-sm font-medium text-slate-800 dark:text-gray-200">Показать кейбинды</span>
+                            <input type="checkbox" id="demo-keybinds" checked onchange="updateDemoPreview()" class="accent-slate-900 dark:accent-orange-500 w-4 h-4">
+                        </label>
+
+                        <label class="flex items-center justify-between p-3 rounded-xl bg-slate-100 dark:bg-dark-bg border border-slate-200 dark:border-gray-800 cursor-pointer">
+                            <span class="text-sm font-medium text-slate-800 dark:text-gray-200">TargetHUD (Цель)</span>
+                            <input type="checkbox" id="demo-target" checked onchange="updateDemoPreview()" class="accent-slate-900 dark:accent-orange-500 w-4 h-4">
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Canvas Preview Window -->
+                <div class="lg:col-span-7">
+                    <div class="relative aspect-video rounded-2xl overflow-hidden border border-slate-300 dark:border-gray-700 shadow-2xl bg-cover bg-center" style="background-image: url('https://images.unsplash.com/photo-1579546929518-9e396f3cc809?q=80&w=1200&auto=format&fit=crop');">
+                        
+                        <!-- Overlay gradient -->
+                        <div class="absolute inset-0 bg-slate-900/20 dark:bg-black/50"></div>
+
+                        <!-- HUD Watermark -->
+                        <div class="absolute top-4 left-4 flex items-center gap-2">
+                            <div id="demo-logo-bg" class="px-3.5 py-1.5 rounded-xl bg-white/90 backdrop-blur-md text-slate-900 font-extrabold text-xs shadow-md">
+                                WhiteVisual <span class="font-normal text-slate-500">| 300 FPS</span>
+                            </div>
+                        </div>
+
+                        <!-- Target HUD Overlay -->
+                        <div id="demo-target-widget" class="absolute top-1/3 right-12 bg-white/90 dark:bg-dark-card/90 backdrop-blur-md p-3.5 rounded-2xl border border-white/50 dark:border-gray-700 flex items-center gap-3 w-52 shadow-xl">
+                            <div class="w-10 h-10 rounded-xl bg-slate-100 dark:bg-red-500/20 text-slate-800 dark:text-red-400 flex items-center justify-center font-bold text-xs border border-slate-200 dark:border-red-500/30">
+                                HP
+                            </div>
+                            <div class="flex-1">
+                                <div class="text-xs font-bold text-slate-900 dark:text-white truncate">PlayerOne</div>
+                                <div class="text-[10px] text-slate-500 dark:text-gray-400">20.0 / 20.0 HP</div>
+                                <div class="w-full bg-slate-200 dark:bg-gray-800 h-1.5 rounded-full mt-1 overflow-hidden">
+                                    <div id="demo-hp-bar" class="bg-slate-900 dark:bg-orange-500 h-full w-[90%] rounded-full"></div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Keybinds Overlay -->
+                        <div id="demo-keybinds-widget" class="absolute bottom-4 left-4 bg-white/90 dark:bg-dark-card/90 backdrop-blur-md p-3 rounded-xl border border-white/50 dark:border-gray-700 w-44 text-xs space-y-1.5 shadow-xl">
+                            <div class="font-bold text-slate-800 dark:text-gray-300 border-b border-slate-200 dark:border-gray-700/50 pb-1">Keybinds</div>
+                            <div class="flex justify-between text-[11px] text-slate-600 dark:text-gray-300">
+                                <span>AutoFarm</span>
+                                <span class="text-emerald-600 dark:text-emerald-400 font-mono">[Toggle]</span>
+                            </div>
+                            <div class="flex justify-between text-[11px] text-slate-600 dark:text-gray-300">
+                                <span>Clean Radar</span>
+                                <span class="text-emerald-600 dark:text-emerald-400 font-mono">[CTRL]</span>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- Pricing Section -->
+    <section id="pricing" class="py-24 relative z-10 px-4 max-w-7xl mx-auto">
+        <div class="text-center space-y-4 mb-16">
+            <h2 class="text-xs font-bold uppercase tracking-widest text-blue-600 dark:text-orange-400">Тарифные планы</h2>
+            <h3 class="text-3xl sm:text-4xl font-extrabold text-slate-900 dark:text-white">Выберите вашу подписку</h3>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+            
+            <!-- Tier 1 -->
+            <div class="glass-panel p-8 rounded-3xl border border-slate-200 dark:border-gray-800 flex flex-col justify-between hover:border-slate-300 dark:hover:border-gray-700 transition-all duration-300">
+                <div class="space-y-6">
+                    <div class="flex justify-between items-center">
+                        <span class="text-sm font-semibold text-slate-500 dark:text-gray-400">Старт</span>
+                        <span class="text-xs bg-slate-100 dark:bg-gray-800 text-slate-700 dark:text-gray-300 px-3 py-1 rounded-full font-mono">30 дней</span>
+                    </div>
+
+                    <div>
+                        <div class="text-4xl font-black text-slate-900 dark:text-white">150 ₽</div>
+                        <div class="text-xs text-slate-500 dark:text-gray-400 mt-1">Доступ ко всем основным модулям</div>
+                    </div>
+
+                    <ul class="space-y-3 text-sm text-slate-600 dark:text-gray-300">
+                        <li class="flex items-center gap-2">
+                            <i data-lucide="check" class="w-4 h-4 text-emerald-600 dark:text-orange-400"></i>
+                            <span>Доступ к клиенту WhiteVisual / ReallyVisuals</span>
+                        </li>
+                        <li class="flex items-center gap-2">
+                            <i data-lucide="check" class="w-4 h-4 text-emerald-600 dark:text-orange-400"></i>
+                            <span>Автоматические обновления</span>
+                        </li>
+                    </ul>
+                </div>
+
+                <button onclick="buyPlan('30 дней', '150 ₽')" class="mt-8 w-full bg-slate-100 dark:bg-dark-hover hover:bg-slate-900 hover:text-white dark:hover:bg-orange-500 text-slate-900 dark:text-white font-bold py-3.5 rounded-xl border border-slate-200 dark:border-gray-700 transition-all duration-300">
+                    Приобрести
+                </button>
+            </div>
+
+            <!-- Tier 2 (Highlighted) -->
+            <div id="popular-plan-card" class="glass-panel p-8 rounded-3xl border-2 border-slate-900 dark:border-orange-500 relative flex flex-col justify-between shadow-xl scale-105 z-10">
+                <div id="popular-badge" class="absolute -top-3.5 left-1/2 -translate-x-1/2 bg-slate-900 dark:bg-gradient-to-r dark:from-orange-500 dark:to-orange-600 text-white text-xs font-bold px-4 py-1 rounded-full uppercase tracking-wider shadow-sm">
+                    Популярный
+                </div>
+
+                <div class="space-y-6">
+                    <div class="flex justify-between items-center pt-2">
+                        <span class="text-sm font-semibold text-blue-600 dark:text-orange-400">Оптимальный</span>
+                        <span class="text-xs bg-blue-50 dark:bg-orange-500/20 text-blue-600 dark:text-orange-400 px-3 py-1 rounded-full font-mono">90 дней</span>
+                    </div>
+
+                    <div>
+                        <div class="text-4xl font-black text-slate-900 dark:text-white">500 ₽</div>
+                        <div class="text-xs text-blue-600 dark:text-orange-400 font-medium mt-1">Лучший выбор по экономии</div>
+                    </div>
+
+                    <ul class="space-y-3 text-sm text-slate-700 dark:text-gray-200">
+                        <li class="flex items-center gap-2">
+                            <i data-lucide="check" class="w-4 h-4 text-emerald-600 dark:text-orange-400"></i>
+                            <span>Полный функционал клиента</span>
+                        </li>
+                        <li class="flex items-center gap-2">
+                            <i data-lucide="check" class="w-4 h-4 text-emerald-600 dark:text-orange-400"></i>
+                            <span>Облачные приватные конфиги</span>
+                        </li>
+                        <li class="flex items-center gap-2">
+                            <i data-lucide="check" class="w-4 h-4 text-emerald-600 dark:text-orange-400"></i>
+                            <span>Приоритетная техподдержка</span>
+                        </li>
+                    </ul>
+                </div>
+
+                <button onclick="buyPlan('90 дней', '500 ₽')" class="mt-8 w-full bg-slate-900 hover:bg-slate-800 dark:bg-orange-500 dark:hover:bg-orange-600 text-white font-bold py-3.5 rounded-xl shadow-md transition-all duration-300">
+                    Приобрести
+                </button>
+            </div>
+
+            <!-- Tier 3 -->
+            <div class="glass-panel p-8 rounded-3xl border border-slate-200 dark:border-gray-800 flex flex-col justify-between hover:border-slate-300 dark:hover:border-gray-700 transition-all duration-300">
+                <div class="space-y-6">
+                    <div class="flex justify-between items-center">
+                        <span class="text-sm font-semibold text-slate-500 dark:text-gray-400">Навсегда</span>
+                        <span class="text-xs bg-purple-100 dark:bg-purple-500/20 text-purple-700 dark:text-purple-400 px-3 py-1 rounded-full font-mono">LIFETIME</span>
+                    </div>
+
+                    <div>
+                        <div class="text-4xl font-black text-slate-900 dark:text-white">900 ₽</div>
+                        <div class="text-xs text-slate-500 dark:text-gray-400 mt-1">Единоразовый доступ без ограничений</div>
+                    </div>
+
+                    <ul class="space-y-3 text-sm text-slate-600 dark:text-gray-300">
+                        <li class="flex items-center gap-2">
+                            <i data-lucide="check" class="w-4 h-4 text-emerald-600 dark:text-orange-400"></i>
+                            <span>Пожизненный доступ без продлений</span>
+                        </li>
+                        <li class="flex items-center gap-2">
+                            <i data-lucide="check" class="w-4 h-4 text-emerald-600 dark:text-orange-400"></i>
+                            <span>VIP роль в Discord и участие в бета-тестах</span>
+                        </li>
+                    </ul>
+                </div>
+
+                <button onclick="buyPlan('Навсегда', '900 ₽')" class="mt-8 w-full bg-slate-100 dark:bg-dark-hover hover:bg-slate-900 hover:text-white dark:hover:bg-orange-500 text-slate-900 dark:text-white font-bold py-3.5 rounded-xl border border-slate-200 dark:border-gray-700 transition-all duration-300">
+                    Приобрести
+                </button>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- FAQ Section -->
+    <section id="faq" class="py-20 relative z-10 px-4 max-w-4xl mx-auto">
+        <div class="text-center space-y-4 mb-12">
+            <h2 class="text-xs font-bold uppercase tracking-widest text-blue-600 dark:text-orange-400">Вопросы</h2>
+            <h3 class="text-3xl font-extrabold text-slate-900 dark:text-white">Часто задаваемые вопросы</h3>
+        </div>
+
+        <div class="space-y-4">
+            <div class="glass-panel rounded-2xl border border-slate-200 dark:border-gray-800 overflow-hidden">
+                <button onclick="toggleFaq(this)" class="w-full p-5 text-left font-bold text-slate-900 dark:text-white flex justify-between items-center hover:bg-slate-100 dark:hover:bg-dark-hover transition-colors">
+                    <span>Чем WhiteVisual отличается от других клиентов?</span>
+                    <i data-lucide="chevron-down" class="w-5 h-5 text-slate-400 transition-transform"></i>
+                </button>
+                <div class="hidden p-5 pt-0 text-sm text-slate-600 dark:text-gray-400 border-t border-slate-200 dark:border-gray-800/50">
+                    WhiteVisual ориентирован на максимальную чистоту визуального оформления, эргономику, низкую нагрузку на видеокарту и полную гибкость кастомизации.
+                </div>
+            </div>
+
+            <div class="glass-panel rounded-2xl border border-slate-200 dark:border-gray-800 overflow-hidden">
+                <button onclick="toggleFaq(this)" class="w-full p-5 text-left font-bold text-slate-900 dark:text-white flex justify-between items-center hover:bg-slate-100 dark:hover:bg-dark-hover transition-colors">
+                    <span>Работает ли клиент на системах с macOS / Linux?</span>
+                    <i data-lucide="chevron-down" class="w-5 h-5 text-slate-400 transition-transform"></i>
+                </button>
+                <div class="hidden p-5 pt-0 text-sm text-slate-600 dark:text-gray-400 border-t border-slate-200 dark:border-gray-800/50">
+                    Да, WhiteVisual поддерживает Windows 10/11, macOS и основные дистрибутивы Linux через стандартные майнкрафт лаунчеры.
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="border-t border-slate-200 dark:border-gray-800/80 py-12 relative z-10 text-xs text-slate-500 dark:text-gray-500 px-4">
+        <div class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-6">
+            <div class="flex items-center gap-3">
+                <div id="footer-logo" class="w-7 h-7 rounded-lg bg-slate-900 dark:bg-orange-500 flex items-center justify-center font-bold text-white">
+                    WV
+                </div>
+                <span id="footer-title" class="font-extrabold text-slate-900 dark:text-white text-base">WhiteVisual</span>
+            </div>
+
+            <div class="text-center md:text-left">
+                © 2026 WhiteVisual. Все права защищены.
+            </div>
+
+            <div class="flex gap-6 text-slate-500 dark:text-gray-400">
+                <a href="#" class="hover:text-slate-900 dark:hover:text-white">Соглашение</a>
+                <a href="#" class="hover:text-slate-900 dark:hover:text-white">Конфиденциальность</a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Auth / Purchase Modal -->
+    <div id="auth-modal" class="fixed inset-0 z-50 bg-slate-900/40 dark:bg-black/80 backdrop-blur-md hidden flex items-center justify-center p-4">
+        <div class="glass-panel max-w-md w-full rounded-3xl p-6 sm:p-8 border border-slate-200 dark:border-gray-700 relative shadow-2xl bg-white dark:bg-dark-card">
+            <button onclick="toggleModal('auth-modal')" class="absolute top-5 right-5 text-slate-400 hover:text-slate-900 dark:hover:text-white p-1">
+                <i data-lucide="x" class="w-5 h-5"></i>
+            </button>
+
+            <div class="text-center space-y-2 mb-6">
+                <h3 id="modal-title" class="text-2xl font-extrabold text-slate-900 dark:text-white">Авторизация</h3>
+                <p id="modal-subtitle" class="text-xs text-slate-500 dark:text-gray-400">Войдите в личный кабинет WhiteVisual</p>
+            </div>
+
+            <form onsubmit="handleAuthSubmit(event)" class="space-y-4">
+                <div>
+                    <label class="block text-xs font-semibold text-slate-700 dark:text-gray-300 mb-1">Никнейм или Email</label>
+                    <input type="text" required placeholder="User_Visual" class="w-full bg-slate-50 dark:bg-dark-bg border border-slate-200 dark:border-gray-800 rounded-xl px-4 py-3 text-sm text-slate-900 dark:text-white focus:outline-none focus:border-slate-900 dark:focus:border-orange-500">
+                </div>
+
+                <div>
+                    <label class="block text-xs font-semibold text-slate-700 dark:text-gray-300 mb-1">Пароль</label>
+                    <input type="password" required placeholder="••••••••" class="w-full bg-slate-50 dark:bg-dark-bg border border-slate-200 dark:border-gray-800 rounded-xl px-4 py-3 text-sm text-slate-900 dark:text-white focus:outline-none focus:border-slate-900 dark:focus:border-orange-500">
+                </div>
+
+                <button type="submit" class="w-full bg-slate-900 hover:bg-slate-800 dark:bg-orange-500 dark:hover:bg-orange-600 text-white font-bold py-3.5 rounded-xl transition-all shadow-md">
+                    Войти
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- JavaScript Logic -->
+    <script>
+        lucide.createIcons();
+
+        // Theme Toggle Switch: WhiteVisual (Light) <-> ReallyVisuals (Dark)
+        function toggleTheme() {
+            const html = document.documentElement;
+            const isLight = html.classList.contains('light');
+
+            const logo = document.getElementById('brand-logo');
+            const title = document.getElementById('brand-title');
+            const heroGradient = document.getElementById('hero-gradient-text');
+            const guiLogo = document.getElementById('gui-header-logo');
+            const guiTitle = document.getElementById('gui-header-title');
+            const footerLogo = document.getElementById('footer-logo');
+            const footerTitle = document.getElementById('footer-title');
+
+            const lightIcon = document.getElementById('theme-icon-light');
+            const darkIcon = document.getElementById('theme-icon-dark');
+
+            if (isLight) {
+                // Switch to Dark Mode (ReallyVisuals)
+                html.classList.remove('light');
+                html.classList.add('dark');
+                
+                if (title) title.innerText = 'ReallyVisuals';
+                if (guiTitle) guiTitle.innerText = 'ReallyVisuals';
+                if (footerTitle) footerTitle.innerText = 'ReallyVisuals';
+                if (logo) logo.innerText = 'RV';
+                if (guiLogo) guiLogo.innerText = 'RV';
+                if (footerLogo) footerLogo.innerText = 'RV';
+
+                if (heroGradient) {
+                    heroGradient.className = "text-transparent bg-clip-text bg-gradient-to-r from-orange-400 via-orange-500 to-amber-500";
+                    heroGradient.innerText = "без компромиссов";
+                }
+
+                lightIcon.classList.remove('flex');
+                lightIcon.classList.add('hidden');
+                darkIcon.classList.remove('hidden');
+                darkIcon.classList.add('flex');
+            } else {
+                // Switch to Light Mode (WhiteVisual)
+                html.classList.remove('dark');
+                html.classList.add('light');
+
+                if (title) title.innerText = 'WhiteVisual';
+                if (guiTitle) guiTitle.innerText = 'WhiteVisual';
+                if (footerTitle) footerTitle.innerText = 'WhiteVisual';
+                if (logo) logo.innerText = 'WV';
+                if (guiLogo) guiLogo.innerText = 'WV';
+                if (footerLogo) footerLogo.innerText = 'WV';
+
+                if (heroGradient) {
+                    heroGradient.className = "text-transparent bg-clip-text bg-gradient-to-r from-blue-600 via-indigo-600 to-slate-900";
+                    heroGradient.innerText = "без лишнего шума";
+                }
+
+                darkIcon.classList.remove('flex');
+                darkIcon.classList.add('hidden');
+                lightIcon.classList.remove('hidden');
+                lightIcon.classList.add('flex');
+            }
+        }
+
+        // GUI Sidebar Switcher
+        function switchTab(tabId) {
+            document.querySelectorAll('.client-tab').forEach(el => {
+                el.classList.remove('bg-slate-900', 'dark:bg-orange-500', 'text-white', 'active-tab');
+                el.classList.add('text-slate-500', 'dark:text-gray-400');
+            });
+
+            const activeBtn = document.getElementById(`tab-${tabId}`);
+            if (activeBtn) {
+                activeBtn.classList.add('bg-slate-900', 'dark:bg-orange-500', 'text-white', 'active-tab');
+                activeBtn.classList.remove('text-slate-500', 'dark:text-gray-400');
+            }
+        }
+
+        // Live Demo Customizer Updates
+        function setHudColor(color) {
+            document.getElementById('demo-hp-bar').style.backgroundColor = color;
+        }
+
+        function updateDemoPreview() {
+            const showKeybinds = document.getElementById('demo-keybinds').checked;
+            const showTarget = document.getElementById('demo-target').checked;
+
+            const keybindsWidget = document.getElementById('demo-keybinds-widget');
+            const targetWidget = document.getElementById('demo-target-widget');
+
+            if (keybindsWidget) keybindsWidget.style.display = showKeybinds ? 'block' : 'none';
+            if (targetWidget) targetWidget.style.display = showTarget ? 'flex' : 'none';
+        }
+
+        // FAQ Accordion Toggle
+        function toggleFaq(button) {
+            const content = button.nextElementSibling;
+            const icon = button.querySelector('i');
+            
+            if (content.classList.contains('hidden')) {
+                content.classList.remove('hidden');
+                if (icon) icon.style.transform = 'rotate(180deg)';
+            } else {
+                content.classList.add('hidden');
+                if (icon) icon.style.transform = 'rotate(0deg)';
+            }
+        }
+
+        // Modal Handler
+        function toggleModal(modalId) {
+            const modal = document.getElementById(modalId);
+            if (modal) {
+                modal.classList.toggle('hidden');
+            }
+        }
+
+        function buyPlan(planName, price) {
+            document.getElementById('modal-title').innerText = `Покупка: ${planName}`;
+            document.getElementById('modal-subtitle').innerText = `Стоимость подписки — ${price}`;
+            toggleModal('auth-modal');
+        }
+
+        function handleAuthSubmit(event) {
+            event.preventDefault();
+            alert('Успешно! Перенаправление на страницу оплаты...');
+            toggleModal('auth-modal');
+        }
+    </script>
+</body>
+</html>
