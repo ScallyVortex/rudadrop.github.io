@@ -3,740 +3,573 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>[Ваше Имя и Фамилия] — [Ваша Профессия / Специализация]</title>
-    <!-- Подключение современного шрифта Inter -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-    
+    <title>WhiteDrop — Выбивай донат на популярных Minecraft серверах</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800;900&display=swap" rel="stylesheet">
     <style>
-        /* --- СБРОС И ОСНОВНЫЕ ПЕРЕМЕННЫЕ --- */
-        :root {
-            --bg-color: #0f172a;
-            --card-bg: #1e293b;
-            --card-border: #334155;
-            --accent-color: #38bdf8;
-            --accent-hover: #0284c7;
-            --text-main: #f8fafc;
-            --text-muted: #94a3b8;
-            --radius-lg: 16px;
-            --radius-md: 10px;
-            --transition: all 0.3s ease;
-        }
-
         * {
+            box-sizing: border-box;
             margin: 0;
             padding: 0;
-            box-sizing: border-box;
-            font-family: 'Inter', sans-serif;
-        }
-
-        html {
-            scroll-behavior: smooth;
+            font-family: 'Montserrat', sans-serif;
         }
 
         body {
-            background-color: var(--bg-color);
-            color: var(--text-main);
-            line-height: 1.6;
+            background-color: #0b0e14;
+            color: #ffffff;
             overflow-x: hidden;
         }
 
-        a {
-            text-decoration: none;
-            color: inherit;
-        }
-
-        ul {
-            list-style: none;
-        }
-
-        .container {
-            max-width: 1100px;
-            margin: 0 auto;
-            padding: 0 20px;
-        }
-
-        /* --- ШАПКА / НАВИГАЦИЯ --- */
+        /* HEADER */
         header {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            background-color: rgba(15, 23, 42, 0.85);
-            backdrop-filter: blur(12px);
-            z-index: 1000;
-            border-bottom: 1px solid var(--card-border);
-        }
-
-        .nav-container {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            height: 70px;
+            padding: 20px 50px;
+            background: rgba(15, 20, 30, 0.9);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            position: sticky;
+            top: 0;
+            z-index: 100;
         }
 
         .logo {
-            font-size: 1.25rem;
-            font-weight: 700;
-            color: var(--text-main);
-            display: flex;
-            align-items: center;
-            gap: 8px;
+            font-size: 28px;
+            font-weight: 900;
+            letter-spacing: 1px;
+            color: #fff;
+            text-shadow: 0 0 15px rgba(255, 255, 255, 0.5);
         }
 
-        .logo span {
-            color: var(--accent-color);
-        }
+        .logo span { color: #00e5ff; }
 
-        .nav-links {
-            display: flex;
-            gap: 25px;
-        }
-
-        .nav-links a {
-            color: var(--text-muted);
-            font-weight: 500;
-            font-size: 0.95rem;
-            transition: var(--transition);
-        }
-
-        .nav-links a:hover {
-            color: var(--accent-color);
-        }
-
-        .btn-contact-nav {
-            background: var(--accent-color);
-            color: #0f172a;
-            padding: 8px 18px;
-            border-radius: var(--radius-md);
+        nav a {
+            color: #a0a5b5;
+            text-decoration: none;
+            margin-left: 25px;
             font-weight: 600;
-            transition: var(--transition);
+            transition: 0.3s;
         }
 
-        .btn-contact-nav:hover {
-            background: var(--accent-hover);
-            color: #ffffff;
+        nav a:hover { color: #00e5ff; }
+
+        /* LIVE DROPS TICKER */
+        .live-drops-container {
+            background: rgba(18, 24, 38, 0.8);
+            border-bottom: 2px solid #00e5ff22;
+            padding: 15px 0;
+            overflow: hidden;
         }
 
-        /* --- БЛОК HERO (ПРИВЕТСТВИЕ) --- */
-        .hero {
-            padding: 160px 0 100px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            gap: 40px;
-        }
-
-        .hero-text {
-            max-width: 600px;
-        }
-
-        .hero-badge {
-            display: inline-block;
-            background: rgba(56, 189, 248, 0.1);
-            color: var(--accent-color);
-            padding: 6px 14px;
-            border-radius: 20px;
-            font-size: 0.85rem;
-            font-weight: 600;
-            margin-bottom: 20px;
-            border: 1px solid rgba(56, 189, 248, 0.2);
-        }
-
-        .hero h1 {
-            font-size: 3rem;
-            font-weight: 800;
-            line-height: 1.2;
-            margin-bottom: 20px;
-        }
-
-        .hero h1 span {
-            color: var(--accent-color);
-        }
-
-        .hero p {
-            color: var(--text-muted);
-            font-size: 1.1rem;
-            margin-bottom: 30px;
-        }
-
-        .hero-btns {
-            display: flex;
-            gap: 15px;
-            flex-wrap: wrap;
-        }
-
-        .btn-primary {
-            background: var(--accent-color);
-            color: #0f172a;
-            padding: 12px 28px;
-            border-radius: var(--radius-md);
-            font-weight: 700;
-            transition: var(--transition);
-            display: inline-block;
-        }
-
-        .btn-primary:hover {
-            background: var(--accent-hover);
-            color: #ffffff;
-            transform: translateY(-2px);
-        }
-
-        .btn-secondary {
-            border: 1px solid var(--card-border);
-            color: var(--text-main);
-            padding: 12px 28px;
-            border-radius: var(--radius-md);
-            font-weight: 600;
-            transition: var(--transition);
-            background: var(--card-bg);
-        }
-
-        .btn-secondary:hover {
-            border-color: var(--accent-color);
-            color: var(--accent-color);
-            transform: translateY(-2px);
-        }
-
-        .hero-avatar {
-            width: 280px;
-            height: 280px;
-            border-radius: 50%;
-            background: linear-gradient(135deg, var(--accent-color), #818cf8);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 5rem;
-            color: #0f172a;
-            font-weight: 800;
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
-            border: 4px solid var(--card-bg);
-            flex-shrink: 0;
-        }
-
-        /* --- ОБЩИЕ СТИЛИ ДЛЯ СЕКЦИЙ --- */
-        section {
-            padding: 80px 0;
-            border-top: 1px solid rgba(51, 65, 85, 0.5);
-        }
-
-        .section-title {
+        .live-drops-title {
             text-align: center;
-            margin-bottom: 50px;
-        }
-
-        .section-title h2 {
-            font-size: 2.2rem;
-            font-weight: 700;
+            font-size: 12px;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: #00e5ff;
             margin-bottom: 10px;
         }
 
-        .section-title p {
-            color: var(--text-muted);
-            font-size: 1rem;
-        }
-
-        /* --- БЛОК "ОБ ОМНЕ" --- */
-        .about-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 25px;
-        }
-
-        .about-card {
-            background: var(--card-bg);
-            border: 1px solid var(--card-border);
-            border-radius: var(--radius-lg);
-            padding: 30px;
-            transition: var(--transition);
-        }
-
-        .about-card:hover {
-            border-color: var(--accent-color);
-            transform: translateY(-5px);
-        }
-
-        .about-card h3 {
-            font-size: 1.25rem;
-            color: var(--accent-color);
-            margin-bottom: 12px;
-        }
-
-        .about-card p {
-            color: var(--text-muted);
-            font-size: 0.95rem;
-        }
-
-        /* --- БЛОК "УСЛУГИ И ЦЕНЫ" --- */
-        .pricing-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 30px;
-        }
-
-        .pricing-card {
-            background: var(--card-bg);
-            border: 1px solid var(--card-border);
-            border-radius: var(--radius-lg);
-            padding: 35px 30px;
+        .drops-wrapper {
             display: flex;
-            flex-direction: column;
-            justify-content: space-between;
+            gap: 15px;
+            width: max-content;
+            animation: scrollDrops 25s linear infinite;
+        }
+
+        .drops-wrapper:hover { animation-play-state: paused; }
+
+        @keyframes scrollDrops {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
+        }
+
+        .drop-card {
+            background: linear-gradient(135deg, #182032 0%, #101624 100%);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            padding: 8px 16px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            min-width: 210px;
+        }
+
+        .drop-card img {
+            width: 32px;
+            height: 32px;
+            border-radius: 6px;
+        }
+
+        .drop-info { display: flex; flex-direction: column; }
+        .drop-user { font-size: 13px; font-weight: 700; }
+        .drop-item { font-size: 12px; font-weight: 800; }
+        .drop-server { font-size: 10px; color: #7a8298; }
+
+        /* FREE CASE SECTION */
+        .free-case-section {
+            max-width: 1200px;
+            margin: 40px auto 20px;
+            padding: 0 20px;
+        }
+
+        .free-case-card {
+            background: linear-gradient(135deg, #1c273c 0%, #0f172a 100%);
+            border: 2px solid #00e5ff;
+            border-radius: 24px;
+            padding: 30px;
+            text-align: center;
+            box-shadow: 0 0 30px rgba(0, 229, 255, 0.15);
             position: relative;
-            transition: var(--transition);
+            overflow: hidden;
         }
 
-        .pricing-card:hover {
-            border-color: var(--accent-color);
-            box-shadow: 0 10px 30px rgba(56, 189, 248, 0.05);
-        }
-
-        .pricing-card.popular {
-            border-color: var(--accent-color);
-            background: linear-gradient(180deg, rgba(30, 41, 59, 1) 0%, rgba(15, 23, 42, 1) 100%);
-        }
-
-        .popular-badge {
+        .free-badge {
             position: absolute;
-            top: -12px;
+            top: 15px;
             right: 20px;
-            background: var(--accent-color);
-            color: #0f172a;
-            font-size: 0.75rem;
-            font-weight: 700;
-            padding: 4px 12px;
-            border-radius: 12px;
+            background: #00e5ff;
+            color: #000;
+            font-weight: 900;
+            font-size: 12px;
+            padding: 6px 14px;
+            border-radius: 20px;
             text-transform: uppercase;
         }
 
-        .pricing-header h3 {
-            font-size: 1.4rem;
-            margin-bottom: 10px;
+        /* CASE ROULETTE */
+        .roulette-container {
+            width: 100%;
+            max-width: 700px;
+            height: 110px;
+            margin: 25px auto;
+            background: #080c14;
+            border-radius: 16px;
+            border: 2px solid rgba(0, 229, 255, 0.3);
+            position: relative;
+            overflow: hidden;
         }
 
-        .price {
-            font-size: 2rem;
-            font-weight: 800;
-            color: var(--accent-color);
-            margin-bottom: 20px;
+        .roulette-marker {
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 4px;
+            height: 100%;
+            background: #ff4757;
+            box-shadow: 0 0 10px #ff4757;
+            z-index: 10;
         }
 
-        .price span {
-            font-size: 0.9rem;
-            color: var(--text-muted);
-            font-weight: 400;
-        }
-
-        .pricing-features {
-            margin-bottom: 30px;
-        }
-
-        .pricing-features li {
-            color: var(--text-muted);
-            font-size: 0.95rem;
-            margin-bottom: 10px;
+        .roulette-track {
             display: flex;
-            align-items: center;
             gap: 10px;
+            position: absolute;
+            left: 0;
+            top: 10px;
+            transition: transform 5s cubic-bezier(0.15, 0.9, 0.2, 1);
         }
 
-        .pricing-features li::before {
-            content: "✓";
-            color: var(--accent-color);
-            font-weight: bold;
+        .roulette-item {
+            min-width: 90px;
+            height: 90px;
+            background: #151c2c;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            font-weight: 800;
+            font-size: 13px;
         }
 
-        /* --- БЛОК "ПРОЕКТЫ / РАБОТЫ" --- */
-        .projects-grid {
+        /* BUTTONS */
+        .btn-spin {
+            background: linear-gradient(90deg, #00e5ff, #0088ff);
+            color: #000;
+            font-weight: 900;
+            font-size: 18px;
+            padding: 16px 40px;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: 0.3s;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .btn-spin:hover:not(:disabled) {
+            filter: brightness(1.2);
+            box-shadow: 0 0 25px rgba(0, 229, 255, 0.5);
+            transform: translateY(-2px);
+        }
+
+        .btn-spin:disabled {
+            background: #2a3447;
+            color: #7a8298;
+            cursor: not-allowed;
+            box-shadow: none;
+        }
+
+        .timer-text {
+            margin-top: 12px;
+            font-size: 14px;
+            color: #ffaa00;
+            font-weight: 700;
+        }
+
+        /* SERVERS SECTION */
+        .servers-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
             gap: 30px;
+            max-width: 1200px;
+            margin: 40px auto;
+            padding: 0 20px;
         }
 
-        .project-card {
-            background: var(--card-bg);
-            border: 1px solid var(--card-border);
-            border-radius: var(--radius-lg);
-            overflow: hidden;
-            transition: var(--transition);
-        }
-
-        .project-card:hover {
-            transform: translateY(-5px);
-            border-color: var(--accent-color);
-        }
-
-        .project-img {
-            width: 100%;
-            height: 200px;
-            background: #334155;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: var(--text-muted);
-            font-weight: 500;
-        }
-
-        .project-info {
-            padding: 25px;
-        }
-
-        .project-info h3 {
-            font-size: 1.25rem;
-            margin-bottom: 10px;
-        }
-
-        .project-info p {
-            color: var(--text-muted);
-            font-size: 0.9rem;
-            margin-bottom: 15px;
-        }
-
-        .project-tags {
-            display: flex;
-            gap: 8px;
-            flex-wrap: wrap;
-        }
-
-        .tag {
-            background: rgba(255, 255, 255, 0.05);
-            color: var(--accent-color);
-            padding: 4px 10px;
-            border-radius: 6px;
-            font-size: 0.75rem;
-            font-weight: 500;
-        }
-
-        /* --- БЛОК "КОНТАКТЫ" --- */
-        .contacts-wrapper {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 40px;
-        }
-
-        .contact-info {
-            display: flex;
-            flex-direction: column;
-            gap: 20px;
-        }
-
-        .contact-item {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            background: var(--card-bg);
-            padding: 18px 20px;
-            border-radius: var(--radius-md);
-            border: 1px solid var(--card-border);
-        }
-
-        .contact-icon {
-            width: 45px;
-            height: 45px;
-            background: rgba(56, 189, 248, 0.1);
-            color: var(--accent-color);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: bold;
-            font-size: 1.2rem;
-            flex-shrink: 0;
-        }
-
-        .contact-details h4 {
-            font-size: 0.85rem;
-            color: var(--text-muted);
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-
-        .contact-details a, .contact-details p {
-            font-weight: 600;
-            color: var(--text-main);
-            font-size: 1rem;
-        }
-
-        .contact-details a:hover {
-            color: var(--accent-color);
-        }
-
-        .social-links {
-            display: flex;
-            gap: 12px;
-            margin-top: 10px;
-        }
-
-        .social-btn {
-            background: var(--card-bg);
-            border: 1px solid var(--card-border);
-            color: var(--text-main);
-            padding: 10px 18px;
-            border-radius: var(--radius-md);
-            font-weight: 500;
-            font-size: 0.9rem;
-            transition: var(--transition);
-        }
-
-        .social-btn:hover {
-            border-color: var(--accent-color);
-            color: var(--accent-color);
-        }
-
-        /* --- ПОДВАЛ (FOOTER) --- */
-        footer {
-            padding: 30px 0;
+        .server-card {
+            background: linear-gradient(180deg, #151c2c 0%, #0d121d 100%);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 20px;
+            padding: 30px;
             text-align: center;
-            color: var(--text-muted);
-            font-size: 0.85rem;
-            border-top: 1px solid var(--card-border);
+            position: relative;
+            transition: 0.4s;
         }
 
-        /* --- АДАПТИВНОСТЬ ПОД МОБИЛЬНЫЕ УСТРОЙСТВА --- */
-        @media (max-width: 768px) {
-            .nav-links {
-                display: none; /* Скрытие ссылок в шапке для мобильных */
-            }
+        .server-card:hover {
+            transform: translateY(-8px);
+            border-color: #00e5ff;
+        }
 
-            .hero {
-                flex-direction: column-reverse;
-                text-align: center;
-                padding: 120px 0 60px;
-            }
+        .server-card::before { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 4px; }
+        .card-rw::before { background: #ff4757; }
+        .card-ft::before { background: #ffa502; }
+        .card-st::before { background: #9b59b6; }
 
-            .hero-btns {
-                justify-content: center;
-            }
+        .server-icon {
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 20px;
+            border-radius: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 36px;
+            font-weight: 900;
+        }
 
-            .hero h1 {
-                font-size: 2.2rem;
-            }
+        .card-rw .server-icon { background: linear-gradient(135deg, #ff4757, #ff6b81); }
+        .card-ft .server-icon { background: linear-gradient(135deg, #ffa502, #eccc68); }
+        .card-st .server-icon { background: linear-gradient(135deg, #8e44ad, #9b59b6); }
 
-            .hero-avatar {
-                width: 200px;
-                height: 200px;
-                font-size: 3.5rem;
-            }
+        .btn-open {
+            width: 100%;
+            padding: 14px 0;
+            border: none;
+            border-radius: 12px;
+            font-weight: 800;
+            font-size: 16px;
+            cursor: pointer;
+            color: #fff;
+            transition: 0.3s;
+            text-transform: uppercase;
+            margin-top: 15px;
+        }
 
-            .section-title h2 {
-                font-size: 1.8rem;
-            }
+        .card-rw .btn-open { background: linear-gradient(90deg, #ff4757, #ff6b81); }
+        .card-ft .btn-open { background: linear-gradient(90deg, #ffaa00, #ffa502); }
+        .card-st .btn-open { background: linear-gradient(90deg, #8e44ad, #9b59b6); }
+
+        /* MODAL */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.85);
+            backdrop-filter: blur(8px);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            background: #151c2c;
+            border: 1px solid #00e5ff;
+            padding: 35px;
+            border-radius: 20px;
+            text-align: center;
+            max-width: 400px;
+            width: 90%;
+        }
+
+        .modal-content input {
+            width: 100%;
+            padding: 12px;
+            margin: 15px 0;
+            border-radius: 8px;
+            border: 1px solid rgba(255,255,255,0.1);
+            background: #0b0e14;
+            color: #fff;
+            font-size: 16px;
+            outline: none;
+        }
+
+        .btn-close {
+            margin-top: 10px;
+            background: transparent;
+            border: none;
+            color: #7a8298;
+            cursor: pointer;
+        }
+
+        footer {
+            text-align: center;
+            padding: 30px;
+            color: #505668;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            font-size: 14px;
+            margin-top: 50px;
         }
     </style>
 </head>
 <body>
 
-    <!-- ШАПКА -->
     <header>
-        <div class="container nav-container">
-            <a href="#" class="logo">[Имя<span>Фамилия]</span></a>
-            <nav class="nav-links">
-                <a href="#about">О мне</a>
-                <a href="#services">Услуги и Цены</a>
-                <a href="#projects">Работы</a>
-                <a href="#contacts">Контакты</a>
-            </nav>
-            <a href="#contacts" class="btn-contact-nav">Связаться</a>
-        </div>
+        <div class="logo">WHITE<span>DROP</span></div>
+        <nav>
+            <a href="#">Главная</a>
+            <a href="#free-case">Бесплатный кейс</a>
+            <a href="#servers">Серверы</a>
+            <a href="#">Поддержка</a>
+        </nav>
     </header>
 
-    <!-- ОСНОВНОЙ БЛОК ПРИВЕТСТВИЯ -->
-    <main class="container">
-        <section class="hero" id="hero">
-            <div class="hero-text">
-                <span class="hero-badge">👋 Добро пожаловать на мой сайт</span>
-                <h1>[Ваше Имя / Профессия], создание <span>качественных решений</span></h1>
-                <p>[Краткое описание вашей деятельности в 1-2 предложениях. Чем вы помогаете клиентам и в чём ваша ключевая ценность].</p>
-                <div class="hero-btns">
-                    <a href="#contacts" class="btn-primary">Обсудить проект</a>
-                    <a href="#services" class="btn-secondary">Узнать цены</a>
-                </div>
+    <!-- LIVE DROPS TICKER -->
+    <div class="live-drops-container">
+        <div class="live-drops-title">● Лента выбитых донатов (LIVE)</div>
+        <div class="drops-wrapper" id="dropsWrapper"></div>
+    </div>
+
+    <!-- DAILY FREE CASE SECTION -->
+    <section class="free-case-section" id="free-case">
+        <div class="free-case-card">
+            <div class="free-badge">Раз в 24 часа</div>
+            <h2 style="font-size: 32px; font-weight: 900;">🎁 Ежедневный Бесплатный Кейс</h2>
+            <p style="color: #7a8298; margin-top: 5px;">Заходи каждый день и забирай случайный донат совершенно бесплатно!</p>
+
+            <div class="roulette-container">
+                <div class="roulette-marker"></div>
+                <div class="roulette-track" id="rouletteTrack"></div>
             </div>
-            <!-- Аватар / Инициалы -->
-            <div class="hero-avatar">
-                [ИФ]
-            </div>
-        </section>
 
-        <!-- БЛОК "О МНЕ" -->
-        <section id="about">
-            <div class="section-title">
-                <h2>О мне и моём опыте</h2>
-                <p>Профессиональный подход к решению ваших задач</p>
-            </div>
-            <div class="about-grid">
-                <div class="about-card">
-                    <h3>[Опыт работы]</h3>
-                    <p>[Укажите ваш стаж, например: Более 5 лет активной работы с клиентами и проектами разного уровня сложности.]</p>
-                </div>
-                <div class="about-card">
-                    <h3>[Чем я занимаюсь]</h3>
-                    <p>[Перечислите ключевые сферы деятельности, используемые методы, инструменты или технологии.]</p>
-                </div>
-                <div class="about-card">
-                    <h3>[Мой подход]</h3>
-                    <p>[Расскажите про принципы работы: соблюдение сроков, внимание к деталям, гибкость и ориентация на результат.]</p>
-                </div>
-            </div>
-        </section>
-
-        <!-- БЛОК "УСЛУГИ И ЦЕНЫ" -->
-        <section id="services">
-            <div class="section-title">
-                <h2>Услуги и Стоимость</h2>
-                <p>Прозрачные тарифы под любые задачи</p>
-            </div>
-            <div class="pricing-grid">
-                <!-- Тариф 1 -->
-                <div class="pricing-card">
-                    <div class="pricing-header">
-                        <h3>[Название услуги 1]</h3>
-                        <div class="price">[от 5 000 ₽] <span>/ проект</span></div>
-                    </div>
-                    <ul class="pricing-features">
-                        <li>[Опция или этап 1]</li>
-                        <li>[Опция или этап 2]</li>
-                        <li>[Срок выполнения, например: 1-3 дня]</li>
-                        <li>[Поддержка и консультации]</li>
-                    </ul>
-                    <a href="#contacts" class="btn-secondary" style="text-align: center;">Заказать</a>
-                </div>
-
-                <!-- Тариф 2 (Популярный) -->
-                <div class="pricing-card popular">
-                    <span class="popular-badge">Популярно</span>
-                    <div class="pricing-header">
-                        <h3>[Название услуги 2]</h3>
-                        <div class="price">[от 15 000 ₽] <span>/ проект</span></div>
-                    </div>
-                    <ul class="pricing-features">
-                        <li>[Полный комплекс работ]</li>
-                        <li>[Опция или этап 2]</li>
-                        <li>[Индивидуальный подход]</li>
-                        <li>[Срок выполнения, например: 5-7 дней]</li>
-                        <li>[Приоритетная поддержка]</li>
-                    </ul>
-                    <a href="#contacts" class="btn-primary" style="text-align: center;">Заказать</a>
-                </div>
-
-                <!-- Тариф 3 -->
-                <div class="pricing-card">
-                    <div class="pricing-header">
-                        <h3>[Название услуги 3]</h3>
-                        <div class="price">[от 30 000 ₽] <span>/ проект</span></div>
-                    </div>
-                    <ul class="pricing-features">
-                        <li>[Сложные / VIP проекты]</li>
-                        <li>[Разработка "под ключ"]</li>
-                        <li>[Интеграция любых систем]</li>
-                        <li>[Максимальные гарантии и поддержка]</li>
-                    </ul>
-                    <a href="#contacts" class="btn-secondary" style="text-align: center;">Заказать</a>
-                </div>
-            </div>
-        </section>
-
-        <!-- БЛОК "ПРОЕКТЫ / МОИ РАБОТЫ" -->
-        <section id="projects">
-            <div class="section-title">
-                <h2>Мои работы</h2>
-                <p>Примеры выполненных проектов</p>
-            </div>
-            <div class="projects-grid">
-                <!-- Проект 1 -->
-                <div class="project-card">
-                    <div class="project-img">[ Превью / Скриншот 1 ]</div>
-                    <div class="project-info">
-                        <h3>[Название проекта 1]</h3>
-                        <p>[Краткое описание выполненной работы, задачи и достигнутого результата.]</p>
-                        <div class="project-tags">
-                            <span class="tag">[Тег 1]</span>
-                            <span class="tag">[Тег 2]</span>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Проект 2 -->
-                <div class="project-card">
-                    <div class="project-img">[ Превью / Скриншот 2 ]</div>
-                    <div class="project-info">
-                        <h3>[Название проекта 2]</h3>
-                        <p>[Краткое описание выполненной работы, задачи и достигнутого результата.]</p>
-                        <div class="project-tags">
-                            <span class="tag">[Тег 1]</span>
-                            <span class="tag">[Тег 2]</span>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Проект 3 -->
-                <div class="project-card">
-                    <div class="project-img">[ Превью / Скриншот 3 ]</div>
-                    <div class="project-info">
-                        <h3>[Название проекта 3]</h3>
-                        <p>[Краткое описание выполненной работы, задачи и достигнутого результата.]</p>
-                        <div class="project-tags">
-                            <span class="tag">[Тег 1]</span>
-                            <span class="tag">[Тег 2]</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- БЛОК "КОНТАКТЫ" -->
-        <section id="contacts">
-            <div class="section-title">
-                <h2>Связаться со мной</h2>
-                <p>Выберите удобный способ связи для обсуждения вашего проекта</p>
-            </div>
-            <div class="contacts-wrapper">
-                <div class="contact-info">
-                    <div class="contact-item">
-                        <div class="contact-icon">📞</div>
-                        <div class="contact-details">
-                            <h4>Телефон</h4>
-                            <a href="tel:+70000000000">[+7 (000) 000-00-00]</a>
-                        </div>
-                    </div>
-
-                    <div class="contact-item">
-                        <div class="contact-icon">✉️</div>
-                        <div class="contact-details">
-                            <h4>Email</h4>
-                            <a href="mailto:your-email@example.com">[your-email@example.com]</a>
-                        </div>
-                    </div>
-
-                    <div class="contact-item">
-                        <div class="contact-icon">📍</div>
-                        <div class="contact-details">
-                            <h4>Локация</h4>
-                            <p>[Ваш город / Удаленно]</p>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="contact-info">
-                    <h3>Мои соцсети и мессенджеры</h3>
-                    <p style="color: var(--text-muted); font-size: 0.95rem;">Быстрее всего я отвечаю в Telegram. Напишите мне, и мы обсудим все детали.</p>
-                    <div class="social-links">
-                        <a href="https://t.me/your_username" target="_blank" class="social-btn">Telegram</a>
-                        <a href="https://vk.com/your_username" target="_blank" class="social-btn">ВКонтакте</a>
-                        <a href="https://github.com/your_username" target="_blank" class="social-btn">GitHub</a>
-                    </div>
-                </div>
-            </div>
-        </section>
-    </main>
-
-    <!-- ПОДВАЛ -->
-    <footer>
-        <div class="container">
-            <p>© 2026 [Ваше Имя и Фамилия]. Все права защищены.</p>
+            <button class="btn-spin" id="spinBtn" onclick="spinFreeCase()">Открыть бесплатно</button>
+            <div class="timer-text" id="timerText"></div>
         </div>
+    </section>
+
+    <!-- SERVERS GRID -->
+    <section class="servers-grid" id="servers">
+        <div class="server-card card-rw">
+            <div class="server-icon">RW</div>
+            <h2>ReallyWorld</h2>
+            <p style="color: #7a8298;">Выбей Дракона, Магистра или Властелина!</p>
+            <button class="btn-open" onclick="openBuyModal('ReallyWorld')">Кейсы от 49 ₽</button>
+        </div>
+
+        <div class="server-card card-ft">
+            <div class="server-icon">FT</div>
+            <h2>FunTime</h2>
+            <p style="color: #7a8298;">Получи Князя или Крушителя на ФанТайм!</p>
+            <button class="btn-open" onclick="openBuyModal('FunTime')">Кейсы от 59 ₽</button>
+        </div>
+
+        <div class="server-card card-st">
+            <div class="server-icon">ST</div>
+            <h2>SpookyTime</h2>
+            <p style="color: #7a8298;">Редкие привилегии для SpookyTime!</p>
+            <button class="btn-open" onclick="openBuyModal('SpookyTime')">Кейсы от 39 ₽</button>
+        </div>
+    </section>
+
+    <!-- MODAL WINDOW -->
+    <div class="modal" id="modal">
+        <div class="modal-content">
+            <h3 id="modalTitle">Забрать выигрыш</h3>
+            <p id="modalSub" style="color: #7a8298; font-size: 14px; margin-top: 5px;">Введите ваш ник в Minecraft:</p>
+            <input type="text" id="usernameInput" placeholder="Ваш ник...">
+            <button class="btn-spin" style="width: 100%; font-size: 16px; padding: 12px;" onclick="confirmClaim()">Забрать донат</button>
+            <br>
+            <button class="btn-close" onclick="closeModal()">Закрыть</button>
+        </div>
+    </div>
+
+    <footer>
+        <p>© 2026 WhiteDrop. Проект не связан с Mojang AB / Microsoft.</p>
     </footer>
 
+    <script>
+        // Данные предметов
+        const prizeList = [
+            { name: 'ВИП', color: '#2ed573' },
+            { name: 'ПРЕМИУМ', color: '#1e90ff' },
+            { name: 'КРЕАТИВ', color: '#eccc68' },
+            { name: 'МАГИСТР', color: '#9b59b6' },
+            { name: 'СПОНСОР', color: '#00e5ff' },
+            { name: 'КНЯЗЬ', color: '#ffa502' },
+            { name: 'ДРАКОН', color: '#ff4757' }
+        ];
+
+        const servers = ['ReallyWorld', 'FunTime', 'SpookyTime'];
+        const nicknames = ['ProGamer2026', 'DarkKnight', 'FunTime_King', 'PvP_God', 'RW_Master', 'Minecraftik'];
+
+        // Генерация бегущей строки
+        const dropsWrapper = document.getElementById('dropsWrapper');
+        let initialHTML = '';
+        for (let i = 0; i < 20; i++) {
+            const randNick = nicknames[Math.floor(Math.random() * nicknames.length)];
+            const randItem = prizeList[Math.floor(Math.random() * prizeList.length)];
+            const randServer = servers[Math.floor(Math.random() * servers.length)];
+            initialHTML += `
+                <div class="drop-card">
+                    <img src="https://mc-heads.net/avatar/${randNick}/32" alt="${randNick}" onerror="this.src='https://mc-heads.net/avatar/Steve/32'">
+                    <div class="drop-info">
+                        <span class="drop-user">${randNick}</span>
+                        <span class="drop-item" style="color: ${randItem.color}">${randItem.name}</span>
+                        <span class="drop-server">${randServer}</span>
+                    </div>
+                </div>`;
+        }
+        dropsWrapper.innerHTML = initialHTML + initialHTML;
+
+        // Построение рулетки бесплатного кейса
+        const track = document.getElementById('rouletteTrack');
+        let rouletteItems = [];
+
+        function buildRoulette() {
+            track.innerHTML = '';
+            rouletteItems = [];
+            // Заполняем ленту 60 предметами для долгим прокрутом
+            for (let i = 0; i < 60; i++) {
+                const randPrize = prizeList[Math.floor(Math.random() * prizeList.length)];
+                rouletteItems.push(randPrize);
+                const el = document.createElement('div');
+                el.className = 'roulette-item';
+                el.style.color = randPrize.color;
+                el.style.borderColor = randPrize.color + '44';
+                el.innerText = randPrize.name;
+                track.appendChild(el);
+            }
+        }
+        buildRoulette();
+
+        // Система таймера 24 часа
+        const COOLDOWN_TIME = 24 * 60 * 60 * 1000; // 24 часа в миллисекундах
+        const spinBtn = document.getElementById('spinBtn');
+        const timerText = document.getElementById('timerText');
+        let wonItem = null;
+
+        function checkCooldown() {
+            const lastSpin = localStorage.getItem('whitedrop_last_spin');
+            if (lastSpin) {
+                const timePassed = Date.now() - parseInt(lastSpin);
+                if (timePassed < COOLDOWN_TIME) {
+                    const timeLeft = COOLDOWN_TIME - timePassed;
+                    spinBtn.disabled = true;
+                    updateTimerDisplay(timeLeft);
+                    return true;
+                }
+            }
+            spinBtn.disabled = false;
+            spinBtn.innerText = 'Открыть бесплатно';
+            timerText.innerText = '';
+            return false;
+        }
+
+        function updateTimerDisplay(ms) {
+            const hours = Math.floor(ms / (1000 * 60 * 60));
+            const minutes = Math.floor((ms % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((ms % (1000 * 60)) / 1000);
+            
+            spinBtn.innerText = 'Кейс уже открыт';
+            timerText.innerText = `Следующий бесплатный кейс через: ${hours}ч ${minutes}м ${seconds}с`;
+        }
+
+        setInterval(() => {
+            const lastSpin = localStorage.getItem('whitedrop_last_spin');
+            if (lastSpin) {
+                const timePassed = Date.now() - parseInt(lastSpin);
+                if (timePassed < COOLDOWN_TIME) {
+                    updateTimerDisplay(COOLDOWN_TIME - timePassed);
+                } else {
+                    checkCooldown();
+                }
+            }
+        }, 1000);
+
+        // Вращение кейса
+        function spinFreeCase() {
+            if (checkCooldown()) return;
+
+            spinBtn.disabled = true;
+            buildRoulette();
+
+            // Победитель — 45-й элемент в рулетке
+            const winningIndex = 45;
+            wonItem = rouletteItems[winningIndex];
+
+            // Расчет сдвига рулетки
+            const itemWidth = 100; // 90px ширина + 10px gap
+            const containerWidth = document.querySelector('.roulette-container').offsetWidth;
+            const targetOffset = (winningIndex * itemWidth) - (containerWidth / 2) + (itemWidth / 2);
+
+            // Запуск анимации
+            track.style.transition = 'transform 5s cubic-bezier(0.15, 0.9, 0.2, 1)';
+            track.style.transform = `translateX(-${targetOffset}px)`;
+
+            // Запоминаем время открытия
+            localStorage.setItem('whitedrop_last_spin', Date.now().toString());
+
+            setTimeout(() => {
+                showWinModal(wonItem);
+                checkCooldown();
+            }, 5300);
+        }
+
+        // Модальное окно выигрыша и покупок
+        function showWinModal(item) {
+            document.getElementById('modalTitle').innerText = '🎉 Вы выиграли ' + item.name + '!';
+            document.getElementById('modalSub').innerText = 'Выберите сервер и введите ник для получения:';
+            document.getElementById('modal').style.display = 'flex';
+        }
+
+        function openBuyModal(serverName) {
+            document.getElementById('modalTitle').innerText = 'Покупка кейса ' + serverName;
+            document.getElementById('modalSub').innerText = 'Введите ваш ник на сервере:';
+            document.getElementById('modal').style.display = 'flex';
+        }
+
+        function closeModal() {
+            document.getElementById('modal').style.display = 'none';
+        }
+
+        function confirmClaim() {
+            const nick = document.getElementById('usernameInput').value;
+            if (!nick.trim()) {
+                alert('Пожалуйста, введите ваш ник в игре!');
+                return;
+            }
+            alert(`Успешно! Донат зачислен на ник ${nick}.`);
+            closeModal();
+        }
+
+        // Проверяем таймер при загрузке страницы
+        checkCooldown();
+    </script>
 </body>
 </html>
